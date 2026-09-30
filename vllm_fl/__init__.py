@@ -164,11 +164,16 @@ def register_model():
     from vllm_fl.patches.triton_attn_prefill_tune import (
         apply_triton_attn_prefill_tune,
     )
+    from vllm_fl.patches.triton_attn_decode_tune import (
+        apply_triton_attn_decode_tune,
+    )
 
     apply_qwen3_5_text_patches()
     patch_vllm_moe_sum()
     # TRITON_ATTN 的 prefill launch 特化（GQA npk==8 + head_size==128 的 prefill 形状）
     apply_triton_attn_prefill_tune()
+    # TRITON_ATTN 的纯 decode 路径特化（必须在 P4b 之后：取的是 P4b 版本的源码）
+    apply_triton_attn_decode_tune()
 
     _register_flagcx_connector()
 
